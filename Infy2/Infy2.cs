@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Infy2
+namespace Infy
 {
     public partial class Infy : Form
     {
@@ -73,7 +73,7 @@ namespace Infy2
             //lifegame.Random(10, 10, 100, 100);
 
             timer1.Interval = 10;
-            cellshow();
+            cellshow();,
 
         }
 
@@ -130,6 +130,11 @@ namespace Infy2
         }
 
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            cellshow();
+            lifegame.NextGeneration();
+        }
 
         private void play_Click(object sender, EventArgs e)
         {
@@ -144,12 +149,6 @@ namespace Infy2
                 timer1.Start();
             }
             isplay = !isplay;
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            cellshow();
-            lifegame.NextGeneration();
         }
     }
 }
