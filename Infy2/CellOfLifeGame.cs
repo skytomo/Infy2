@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace Infy2
 {
     /// <summary>
-    /// ƒ‰ƒCƒtƒQ[ƒ€‚ÌƒZƒ‹‚ÌÀ•W‚ğŠÇ—‚·‚é‚½‚ß‚ÌƒNƒ‰ƒX‚Å‚·B
+    /// ãƒ©ã‚¤ãƒ•ã‚²ãƒ¼ãƒ ã®ã‚»ãƒ«ã®åº§æ¨™ã‚’ç®¡ç†ã™ã‚‹ãŸã‚ã®ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
     /// </summary>
     struct CellOfLifeGame
     {
         private int x, y;
 
-        /// <summary>ƒZƒ‹‚Ìx²‚Ì’l‚ğ•\‚µ‚Ü‚·B</summary>
+        /// <summary>ã‚»ãƒ«ã®xè»¸ã®å€¤ã‚’è¡¨ã—ã¾ã™ã€‚</summary>
         public int X
         {
             get
@@ -26,7 +26,7 @@ namespace Infy2
             }
         }
 
-        /// <summary>ƒZƒ‹‚Ìy²‚Ì’l‚ğ•\‚µ‚Ü‚·B</summary>
+        /// <summary>ã‚»ãƒ«ã®yè»¸ã®å€¤ã‚’è¡¨ã—ã¾ã™ã€‚</summary>
         public int Y
         {
             get
@@ -40,10 +40,10 @@ namespace Infy2
         }
 
         /// <summary>
-        /// LifeGame‚ÌƒZƒ‹‚ÌÀ•W‚ğŠi”[‚·‚é‚½‚ß‚ÌƒRƒ“ƒXƒgƒ‰ƒNƒ^‚Å‚·B
+        /// LifeGameã®ã‚»ãƒ«ã®åº§æ¨™ã‚’æ ¼ç´ã™ã‚‹ãŸã‚ã®ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã§ã™ã€‚
         /// </summary>
-        /// <param name="x">ƒZƒ‹‚Ìx²‚Ì’l‚ğ•\‚µ‚Ü‚·B</param> 
-        /// <param name="y">ƒZƒ‹‚Ìy²‚Ì’l‚ğ•\‚µ‚Ü‚·B</param>       
+        /// <param name="x">ã‚»ãƒ«ã®xè»¸ã®å€¤ã‚’è¡¨ã—ã¾ã™ã€‚</param> 
+        /// <param name="y">ã‚»ãƒ«ã®yè»¸ã®å€¤ã‚’è¡¨ã—ã¾ã™ã€‚</param>       
         public CellOfLifeGame(int x, int y)
         {
             this.x = x;
@@ -51,7 +51,7 @@ namespace Infy2
         }
 
         /// <summary>
-        /// À•W‚Ìâ‘Î’l‚ğŒvZ‚µAŒ´“_‚©‚ç‚Ì‹——£‚ğŒvZ‚µ‚Ü‚·B
+        /// åº§æ¨™ã®çµ¶å¯¾å€¤ã‚’è¨ˆç®—ã—ã€åŸç‚¹ã‹ã‚‰ã®è·é›¢ã‚’è¨ˆç®—ã—ã¾ã™ã€‚
         /// </summary>
         public double Abs() { return Math.Sqrt(x * x + y * y); }
     }

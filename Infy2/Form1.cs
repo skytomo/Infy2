@@ -27,6 +27,12 @@ namespace Infy2
             Resize += new EventHandler(Form1_Resize);
 
             /*
+            lifegame.SetCell(new CellOfLifeGame(9, 0));
+            lifegame.SetCell(new CellOfLifeGame(9, 1));
+            lifegame.SetCell(new CellOfLifeGame(9, 2));
+            */
+
+            /*
             lifegame.SetCell(new CellOfLifeGame(9, 11));
             lifegame.SetCell(new CellOfLifeGame(10, 10));
             lifegame.SetCell(new CellOfLifeGame(11, 10));
@@ -45,6 +51,7 @@ namespace Infy2
             lifegame.SetCell(new CellOfLifeGame(11, 12));
             */
 
+            
             lifegame.SetCell(new CellOfLifeGame(1, 3));
             lifegame.SetCell(new CellOfLifeGame(2, 4));
             lifegame.SetCell(new CellOfLifeGame(3, 4));
@@ -67,6 +74,7 @@ namespace Infy2
             lifegame.SetCell(new CellOfLifeGame(5, 17));
             lifegame.SetCell(new CellOfLifeGame(5, 16));
             lifegame.SetCell(new CellOfLifeGame(4, 15));
+            
 
             //test
 
@@ -88,6 +96,12 @@ namespace Infy2
             cellshow();
         }
 
+        /// <summary>
+        /// マウスの左ボタンを押したときに、
+        /// マウスの座標を変数に格納します。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pictureBox1_MouseDown(object sender, EventArgs e)
         {
             //Console.WriteLine("Down");
@@ -97,6 +111,13 @@ namespace Infy2
             cameray = drawlifegame.Y;
         }
 
+        /// <summary>
+        /// マウスを押している状態で、
+        /// マウスを動かしたときに、
+        /// 画面が動くように制御します。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pictureBox1_MouseMove(object sender, EventArgs e)
         {
             if ((MouseButtons & MouseButtons.Left) == MouseButtons.Left)
@@ -108,7 +129,11 @@ namespace Infy2
             }
         }
 
-        //Resizeイベントハンドラ
+        /// <summary>
+        /// 画面の大きさが変わったときに描画をし直します。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form1_Resize(object sender, EventArgs e)
         {
             Control c = (Control)sender;
@@ -123,14 +148,12 @@ namespace Infy2
             pictureBox1.Focus();
         }
 
-        private void cellshow()
-        {
-            pictureBox1.Image = drawlifegame.Draw(lifegame.LifeList, pictureBox1.Width, pictureBox1.Height);
-            label1.Text = lifegame.Generate + "世代目 " + lifegame.LifeList.Count + "セル" + " (x" + drawlifegame.Zoom.ToString("F2") + ")";
-        }
-
-
-
+        /// <summary>
+        /// クリックすると再生し、
+        /// もう一度クリックすると停止します。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void play_Click(object sender, EventArgs e)
         {
             if (isplay)
@@ -146,6 +169,20 @@ namespace Infy2
             isplay = !isplay;
         }
 
+        /// <summary>
+        /// 何世代目のセルが何セル生きているかを表示します。
+        /// </summary>
+        private void cellshow()
+        {
+            pictureBox1.Image = drawlifegame.Draw(lifegame.LifeList, pictureBox1.Width, pictureBox1.Height);
+            label1.Text = lifegame.Generate + "世代目 " + lifegame.LifeList.Count + "セル" + " (x" + drawlifegame.Zoom.ToString("F2") + ")";
+        }
+
+        /// <summary>
+        /// どのくらいの周期で世代を交代するかを設定したとおりに更新します。
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void timer1_Tick(object sender, EventArgs e)
         {
             cellshow();

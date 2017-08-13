@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -64,7 +64,7 @@ namespace Infy2
         {
             if (width <= 0) width = 1;
             if (height <= 0) height = 1;
-            //‰ß‹Ž‚ÉŽg‚Á‚½canvas‚ª‚ ‚Á‚½ê‡‚ÍA‚±‚±‚Å‰ð•ú‚µ‚Ä‚©‚çV‚µ‚­new‚·‚éB
+            //éŽåŽ»ã«ä½¿ã£ãŸcanvasãŒã‚ã£ãŸå ´åˆã¯ã€ã“ã“ã§è§£æ”¾ã—ã¦ã‹ã‚‰æ–°ã—ãnewã™ã‚‹ã€‚
             if (canvas!=null) canvas.Dispose();
             canvas = new Bitmap(width, height);
             Brush brush;
