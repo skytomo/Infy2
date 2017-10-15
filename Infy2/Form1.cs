@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,14 +13,17 @@ namespace Infy2
 {
     public partial class Infy : Form
     {
-        LifeGame lifegame = new LifeGame();
+        LifeGame lifegame = new LifeGame(true);
         DrawLifeGame drawlifegame = new DrawLifeGame();
+
         bool isplay = false;
         int basemousex, basemousey;
         float camerax, cameray;
+        string mode = "Operate";
 
         public Infy()
         {
+
             InitializeComponent();
             pictureBox1.MouseWheel += new System.Windows.Forms.MouseEventHandler(pictureBox1_MouseWheel);
             pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(pictureBox1_MouseDown);
@@ -51,7 +55,7 @@ namespace Infy2
             lifegame.SetCell(new CellOfLifeGame(11, 12));
             */
 
-            
+
             lifegame.SetCell(new CellOfLifeGame(1, 3));
             lifegame.SetCell(new CellOfLifeGame(2, 4));
             lifegame.SetCell(new CellOfLifeGame(3, 4));
@@ -74,7 +78,7 @@ namespace Infy2
             lifegame.SetCell(new CellOfLifeGame(5, 17));
             lifegame.SetCell(new CellOfLifeGame(5, 16));
             lifegame.SetCell(new CellOfLifeGame(4, 15));
-            
+
 
             //test
 
@@ -104,11 +108,45 @@ namespace Infy2
         /// <param name="e"></param>
         private void pictureBox1_MouseDown(object sender, EventArgs e)
         {
-            //Console.WriteLine("Down");
-            basemousex = MousePosition.X;
-            basemousey = MousePosition.Y;
-            camerax = drawlifegame.X;
-            cameray = drawlifegame.Y;
+            if (mode == "Operate")
+            {
+                //Console.WriteLine("Down");
+                basemousex = MousePosition.X;
+                basemousey = MousePosition.Y;
+                camerax = drawlifegame.X;
+                cameray = drawlifegame.Y;
+            }
+            else if (mode == "Write")
+            {
+                //フォーム上の座標でマウスポインタの位置を取得する
+                //画面座標でマウスポインタの位置を取得する
+                System.Drawing.Point sp = System.Windows.Forms.Cursor.Position;
+                //画面座標をクライアント座標に変換する
+                System.Drawing.Point cp = this.PointToClient(sp);
+                //X座標を取得する
+                int xonform = cp.X;
+                //Y座標を取得する
+                int yonform = cp.Y;
+                lifegame.SetCell(new CellOfLifeGame((int)(drawlifegame.X + xonform / (11 * drawlifegame.Zoom)), (int)(drawlifegame.Y + yonform / (11 * drawlifegame.Zoom))));
+                Console.WriteLine((drawlifegame.X) +" "+ MousePosition.X + " "+ (10 * drawlifegame.Zoom) + " "+(int)((camerax + MousePosition.X) / (10 * drawlifegame.Zoom)));
+                cellshow();
+            }
+            else if (mode == "Remove")
+            {
+                //フォーム上の座標でマウスポインタの位置を取得する
+                //画面座標でマウスポインタの位置を取得する
+                System.Drawing.Point sp = System.Windows.Forms.Cursor.Position;
+                //画面座標をクライアント座標に変換する
+                System.Drawing.Point cp = this.PointToClient(sp);
+                //X座標を取得する
+                int xonform = cp.X;
+                //Y座標を取得する
+                int yonform = cp.Y;
+                lifegame.ResetCell(new CellOfLifeGame((int)(drawlifegame.X + xonform / (11 * drawlifegame.Zoom)), (int)(drawlifegame.Y + yonform / (11 * drawlifegame.Zoom))));
+                Console.WriteLine((drawlifegame.X) + " " + MousePosition.X + " " + (10 * drawlifegame.Zoom) + " " + (int)((camerax + MousePosition.X) / (10 * drawlifegame.Zoom)));
+                cellshow();
+            }
+
         }
 
         /// <summary>
@@ -120,13 +158,50 @@ namespace Infy2
         /// <param name="e"></param>
         private void pictureBox1_MouseMove(object sender, EventArgs e)
         {
-            if ((MouseButtons & MouseButtons.Left) == MouseButtons.Left)
+            if (mode == "Operate")
             {
-                //Console.WriteLine((MousePosition.X - basemousex) + "," + (MousePosition.Y - basemousey));
-                drawlifegame.X = camerax - (MousePosition.X - basemousex) / (10 * drawlifegame.Zoom);
-                drawlifegame.Y = cameray - (MousePosition.Y - basemousey) / (10 * drawlifegame.Zoom);
+                if ((MouseButtons & MouseButtons.Left) == MouseButtons.Left)
+                {
+                    //Console.WriteLine((MousePosition.X - basemousex) + "," + (MousePosition.Y - basemousey));
+                    drawlifegame.X = camerax - (MousePosition.X - basemousex) / (10 * drawlifegame.Zoom);
+                    drawlifegame.Y = cameray - (MousePosition.Y - basemousey) / (10 * drawlifegame.Zoom);
+                    cellshow();
+                }
+            }
+            else if (mode == "Write")
+            {
+                if ((MouseButtons & MouseButtons.Left) == MouseButtons.Left)
+                {
+                    //フォーム上の座標でマウスポインタの位置を取得する
+                    //画面座標でマウスポインタの位置を取得する
+                    System.Drawing.Point sp = System.Windows.Forms.Cursor.Position;
+                    //画面座標をクライアント座標に変換する
+                    System.Drawing.Point cp = this.PointToClient(sp);
+                    //X座標を取得する
+                    int xonform = cp.X;
+                    //Y座標を取得する
+                    int yonform = cp.Y;
+                    lifegame.SetCell(new CellOfLifeGame((int)(drawlifegame.X +  xonform / (11 * drawlifegame.Zoom)), (int)(drawlifegame.Y + yonform / (11 * drawlifegame.Zoom))));
+                    Console.WriteLine((drawlifegame.X) + " " + MousePosition.X + " " + (10 * drawlifegame.Zoom) + " " + (int)((camerax + MousePosition.X) / (10 * drawlifegame.Zoom)));
+                    cellshow();
+                }
+            }
+            else if (mode=="Remove")
+            {
+                //フォーム上の座標でマウスポインタの位置を取得する
+                //画面座標でマウスポインタの位置を取得する
+                System.Drawing.Point sp = System.Windows.Forms.Cursor.Position;
+                //画面座標をクライアント座標に変換する
+                System.Drawing.Point cp = this.PointToClient(sp);
+                //X座標を取得する
+                int xonform = cp.X;
+                //Y座標を取得する
+                int yonform = cp.Y;
+                lifegame.ResetCell(new CellOfLifeGame((int)(drawlifegame.X + xonform / (11 * drawlifegame.Zoom)), (int)(drawlifegame.Y + yonform / (11 * drawlifegame.Zoom))));
+                Console.WriteLine((drawlifegame.X) + " " + MousePosition.X + " " + (10 * drawlifegame.Zoom) + " " + (int)((camerax + MousePosition.X) / (10 * drawlifegame.Zoom)));
                 cellshow();
             }
+            
         }
 
         /// <summary>
@@ -168,6 +243,25 @@ namespace Infy2
             }
             isplay = !isplay;
         }
+
+        private void 操作ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mode = "Operate";
+            ModeLabel.Text = "モード:操作";
+        }
+
+        private void 書き込みToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mode = "Write";
+            ModeLabel.Text = "モード:書き込み";
+        }
+
+        private void 消去ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mode = "Remove";
+            ModeLabel.Text = "モード:消去";
+        }
+
 
         /// <summary>
         /// 何世代目のセルが何セル生きているかを表示します。

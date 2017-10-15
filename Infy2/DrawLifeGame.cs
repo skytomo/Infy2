@@ -10,6 +10,7 @@ namespace Infy2
     class DrawLifeGame
     {
         Bitmap canvas;
+
         int cellsize = 10, gridsize = 1;
         float x = 0.0F, y = 0.0F, zoom = 1.0F;
 
@@ -45,13 +46,13 @@ namespace Infy2
             }
             set
             {
-                if (zoom < 0.1F)
+                if (zoom < 0.125F)
                 {
-                    zoom = 0.1F;
+                    zoom = 0.125F;
                 }
-                else if (zoom > 20.0F)
+                else if (zoom > 32.0F)
                 {
-                    zoom = 20.0F;
+                    zoom = 32.0F;
                 }
                 else
                 {
@@ -65,7 +66,7 @@ namespace Infy2
             if (width <= 0) width = 1;
             if (height <= 0) height = 1;
             //過去に使ったcanvasがあった場合は、ここで解放してから新しくnewする。
-            if (canvas!=null) canvas.Dispose();
+            if (canvas != null) canvas.Dispose();
             canvas = new Bitmap(width, height);
             Brush brush;
             brush = Brushes.Lime;
