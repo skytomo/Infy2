@@ -37,6 +37,8 @@ namespace Infy2
             birthrule = new Dictionary<int, bool>() { { 0, false }, { 1, false }, { 2, false }, { 3, true }, { 4, false }, { 5, false }, { 6, false }, { 7, false }, { 8, false } };
             sustainrule = new Dictionary<int, bool>() { { 0, false }, { 1, false }, { 2, true }, { 3, true }, { 4, false }, { 5, false }, { 6, false }, { 7, false }, { 8, false } };
 
+            //bir = new bool[9] { false, false, true, false, false, false, false, false, false };
+            //sur = new bool[9] { false, false, false, false, false, false, false, false, false };
             bir = new bool[9] { false, false, false, true, false, false, false, false, false };
             sur = new bool[9] { false, false, true, true, false, false, false, false, false };
             //bir = new bool[9] { true, true, true, true, true, true, true, true, true };
@@ -78,9 +80,24 @@ namespace Infy2
             if (lifelist.IndexOf(cell) == -1) lifelist.Add(cell);
         }
 
-        public void ResetCell(CellOfLifeGame cell)
+        public void SetCell(int x, int y)
+        {
+            if (lifelist.IndexOf(new CellOfLifeGame(x, y)) == -1) lifelist.Add(new CellOfLifeGame(x, y));
+        }
+
+        public void RemoveCell(CellOfLifeGame cell)
         {
             if (lifelist.IndexOf(cell) != -1) lifelist.Remove(cell);
+        }
+
+        public void RemoveCell(int x, int y)
+        {
+            if (lifelist.IndexOf(new CellOfLifeGame(x, y)) == -1) lifelist.Remove(new CellOfLifeGame(x, y));
+        }
+
+        public void ClearAllCell()
+        {
+            lifelist.Clear();
         }
 
         /// <summary>
@@ -101,6 +118,7 @@ namespace Infy2
                         var cell = new CellOfLifeGame(g.X + i, g.Y + j);
                         if (neighborlist.ContainsKey(cell))
                         {
+                            if (neighborlist[cell] > 4) continue;
                             neighborlist[cell]++;
                         }
                         else
