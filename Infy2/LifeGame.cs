@@ -17,7 +17,9 @@ namespace Infy2
         private int gen;
         //private bool iscw;
         private List<CellOfLifeGame> initialstate;
-        private List<CellOfLifeGame> lifelist;
+        private List<CellOfLifeGameAndIsActivity> lifelist;
+        private List<CellOfLifeGameAndIsActivity> prelifelist;
+        private List<CellOfLifeGameAndIsActivity> newlifelist;
         private Dictionary<CellOfLifeGame, int> neighborlist;
         private Dictionary<int, bool> birthrule;
         private Dictionary<int, bool> sustainrule;
@@ -25,14 +27,37 @@ namespace Infy2
         private bool[] bir;
         private bool[] sur;
 
+        private struct CellOfLifeGameAndIsActivity
+        {
+            public CellOfLifeGame cell;
+            public bool isActivation;
 
+            public CellOfLifeGameAndIsActivity(CellOfLifeGame cell, bool isActivation)
+            {
+                this.cell = cell;
+                this.isActivation = isActivation;
+            }
+
+            public static implicit operator CellOfLifeGameAndIsActivity(CellOfLifeGame c)
+            {
+                return new CellOfLifeGameAndIsActivity(c, true);
+            }
+
+            public static explicit operator CellOfLifeGame(CellOfLifeGameAndIsActivity c)
+            {
+                return c.cell;
+            }
+
+        }
 
         public LifeGame(bool t)
         {
             gen = 1;
             //iscw = false;
             initialstate = new List<CellOfLifeGame>();
-            lifelist = new List<CellOfLifeGame>();
+            lifelist = new List<CellOfLifeGameAndIsActivity>();
+            prelifelist = new List<CellOfLifeGameAndIsActivity>();
+            newlifelist = new List<CellOfLifeGameAndIsActivity>();
             neighborlist = new Dictionary<CellOfLifeGame, int>();
             birthrule = new Dictionary<int, bool>() { { 0, false }, { 1, false }, { 2, false }, { 3, true }, { 4, false }, { 5, false }, { 6, false }, { 7, false }, { 8, false } };
             sustainrule = new Dictionary<int, bool>() { { 0, false }, { 1, false }, { 2, true }, { 3, true }, { 4, false }, { 5, false }, { 6, false }, { 7, false }, { 8, false } };
@@ -63,7 +88,11 @@ namespace Infy2
             set
             {
                 initialstate = value;
-                lifelist = initialstate;
+                var newinitalstate = new List<CellOfLifeGameAndIsActivity>();
+                foreach (var i in initialstate)
+                {
+                    newinitalstate.Add(i);
+                }
             }
         }
 
@@ -71,8 +100,18 @@ namespace Infy2
         {
             get
             {
+                var lifelist = new List<CellOfLifeGame>();
+                foreach (var i in this.lifelist)
+                {
+                    lifelist.Add((CellOfLifeGame)i);
+                }
                 return lifelist;
             }
+        }
+
+        public bool getIsActivation(CellOfLifeGame cell)
+        {
+            return (lifelist.IndexOf(new CellOfLifeGameAndIsActivity(cell, true)) == -1) ? false : true;
         }
 
         public void SetCell(CellOfLifeGame cell)
@@ -115,10 +154,9 @@ namespace Infy2
                 {
                     foreach (var j in delta)
                     {
-                        var cell = new CellOfLifeGame(g.X + i, g.Y + j);
+                        var cell = new CellOfLifeGame(g.cell.X + i, g.cell.Y + j);
                         if (neighborlist.ContainsKey(cell))
                         {
-                            if (neighborlist[cell] > 4) continue;
                             neighborlist[cell]++;
                         }
                         else
@@ -128,7 +166,7 @@ namespace Infy2
                     }
 
                 }
-                neighborlist[new CellOfLifeGame(g.X, g.Y)]--;
+                neighborlist[new CellOfLifeGame(g.cell.X, g.cell.Y)]--;
             }
         }
 
@@ -137,7 +175,9 @@ namespace Infy2
         {
             gen++;
             MakeNeighborList();
-            List<CellOfLifeGame> newlifelist = new List<CellOfLifeGame>();
+            prelifelist.Clear();
+            prelifelist = lifelist;
+            newlifelist = new List<CellOfLifeGameAndIsActivity>();
             //if (iscw) Console.WriteLine("Gen {0} {{", gen);
             foreach (var g in neighborlist)
             {
